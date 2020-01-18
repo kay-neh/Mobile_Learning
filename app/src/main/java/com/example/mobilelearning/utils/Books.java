@@ -1,9 +1,9 @@
 package com.example.mobilelearning.utils;
 
 public class Books implements java.io.Serializable {
-    String bookName;
-    String bookSize;
-    String bookDownloadUrl;
+    private String bookName;
+    private String bookSize;
+    private String bookDownloadUrl;
 
     public Books(){}
 

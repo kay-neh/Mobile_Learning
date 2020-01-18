@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#5e35b1</color>
-    <color name="colorPrimaryDark">#280680</color>
-    <color name="colorAccent">#5e35b1</color>
+    <color name="colorPrimary">#2B3D4D</color>
+    <color name="colorPrimaryDark">#23303D</color>
+    <color name="colorAccent">#10CAC9</color>
 
     <color name="material_green_50">#E8F5E9</color>
     <color name="material_green_500">#4CAF50</color>
@@ -10,4 +10,14 @@
     <color name="material_green_a200">#69F0AE</color>
     <color name="material_lime_a700">#AEEA00</color>
     <color name="material_purple_a700">#AA00FF</color>
+
+
+    <color name="profile_text_color">#000000</color>
+    <color name="frame_color">#f5f5f5</color>
+    <color name="card_color">#FFFFFF</color>
+
+    <color name="menu_color">#000000</color>
+    <color name="dialog_color">#000000</color>
+
+    <color name="textColorEarthquakeDetails">#B4BAC0</color>
 </resources>

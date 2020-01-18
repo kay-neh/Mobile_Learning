@@ -13,8 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.mobilelearning.utils.Books;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.mobilelearning.utils.Courses;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,37 +27,38 @@ import java.util.List;
 
 public class CourseInfoPreActivity extends AppCompatActivity {
 
+    FirebaseAuth firebaseAuth;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_info_pre);
 
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-
-
-
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
         ImageView courseImage = findViewById(R.id.course_image);
         TextView courseTitle = findViewById(R.id.course_title);
         TextView courseCode = findViewById(R.id.course_code);
         TextView courseDes = findViewById(R.id.course_description);
 
         //First Lecturer
-       // ImageView lectImage1 = findViewById(R.id.lecturer_photo_1);
+        //ImageView lectImage1 = findViewById(R.id.lecturer_photo_1);
         final TextView lectName1 = findViewById(R.id.lecturer_name_1);
 
         //Second Lecturer
         final CardView card2 = findViewById(R.id.lecturer_card_2);
-     //   ImageView lectImage2 = findViewById(R.id.lecturer_photo_2);
+     // ImageView lectImage2 = findViewById(R.id.lecturer_photo_2);
         final TextView lectName2 = findViewById(R.id.lecturer_name_2);
 
         //Third Lecturer
         final CardView card3 = findViewById(R.id.lecturer_card_3);
-     //   ImageView lectImage3 = findViewById(R.id.lecturer_photo_3);
+     // ImageView lectImage3 = findViewById(R.id.lecturer_photo_3);
         final TextView lectName3 = findViewById(R.id.lecturer_name_3);
 
         //Toolbar
         Toolbar tool = findViewById(R.id.toolbar_course_pre_sub);
-        tool.setOnClickListener(new View.OnClickListener() {
+        tool.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
@@ -70,13 +71,38 @@ public class CourseInfoPreActivity extends AppCompatActivity {
         final String courseTitleData = i.getStringExtra("Course Title");
         final String courseCodeData = i.getStringExtra("Course Code");
         final String courseImageData = i.getStringExtra("Course Image");
-        final String[] lecturerData = i.getStringArrayExtra("Course Lecturer");
         final String courseDescription = i.getStringExtra("Course Description");
-        final String[] books =i.getStringArrayExtra("Course Books");
-        final String[] courseOut1 = i.getStringArrayExtra("Course Out1");
-        final String[] courseOut2 = i.getStringArrayExtra("Course Out2");
-        final String[] courseOut3 = i.getStringArrayExtra("Course Out3");
 
+
+        databaseReference = firebaseDatabase.getReference("courses/"+courseTitleData+"/courseLecturer");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<String> lecturerData = new ArrayList<>();
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                    String lect = (String) dataSnapshot1.getValue();
+                    lecturerData.add(lect);
+                }
+                //for lecturer name
+                if(lecturerData.size() == 1){
+                    lectName1.setText(lecturerData.get(0));
+                    card2.setVisibility(View.GONE);
+                    card3.setVisibility(View.GONE);
+                }else if (lecturerData.size() == 2){
+                    lectName1.setText(lecturerData.get(0));
+                    lectName2.setText(lecturerData.get(1));
+                    card3.setVisibility(View.GONE);
+                }else if(lecturerData.size() ==3){
+                    lectName1.setText(lecturerData.get(0));
+                    lectName2.setText(lecturerData.get(1));
+                    lectName3.setText(lecturerData.get(2));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
 
         //Populating courseinfo pre reg
         courseTitle.setText(courseTitleData);
@@ -84,43 +110,47 @@ public class CourseInfoPreActivity extends AppCompatActivity {
         Glide.with(courseImage.getContext()).load(courseImageData).into(courseImage);
         courseDes.setText(courseDescription);
 
-        //for lecturer name
-        if(lecturerData.length == 1){
-            lectName1.setText(lecturerData[0]);
-            card2.setVisibility(View.GONE);
-            card3.setVisibility(View.GONE);
-        }else if (lecturerData.length == 2){
-            lectName1.setText(lecturerData[0]);
-            lectName2.setText(lecturerData[1]);
-            card3.setVisibility(View.GONE);
-        }else if(lecturerData.length ==3){
-            lectName1.setText(lecturerData[0]);
-            lectName2.setText(lecturerData[1]);
-            lectName3.setText(lecturerData[2]);
-        }
-
-
         //Floating Action Button
-        FloatingActionButton addCourse = findViewById(R.id.add_course);
+        final ExtendedFloatingActionButton addCourse = findViewById(R.id.add_course);
+        final ExtendedFloatingActionButton removeCourse = findViewById(R.id.remove_course);
+
+        //Switches the FAB between register and unregister based on users courselist
+        DatabaseReference ref2 = firebaseDatabase.getReference("users/"+firebaseAuth.getCurrentUser().getUid());
+        ref2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChild("my courses/"+courseTitleData)) {
+                        addCourse.setVisibility(View.GONE);
+                        removeCourse.setVisibility(View.VISIBLE);
+                    }else{
+                        addCourse.setVisibility(View.VISIBLE);
+                        removeCourse.setVisibility(View.GONE);
+                    }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+        });
+
+
         addCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CourseInfoPreActivity.this,CourseInfoPostActivity.class);
-                intent.putExtra("Course Title",courseTitleData);
-                intent.putExtra("Course Code",courseCodeData);
-                intent.putExtra("Course Image",courseImageData);
-                intent.putExtra("Course Lecturer",lecturerData);
-                intent.putExtra("Course Description",courseDescription);
-                intent.putExtra("Course Books",books);
-                intent.putExtra("Course Out1",courseOut1);
-                intent.putExtra("Course Out2",courseOut2);
-                intent.putExtra("Course Out3",courseOut3);
-
-                startActivity(intent);
+                DatabaseReference ref2 = firebaseDatabase.getReference("users/"+firebaseAuth.getCurrentUser().getUid()+"/my courses");
+                Courses courses = new Courses(courseCodeData,courseTitleData,courseImageData,courseDescription);
+                ref2.child(courseTitleData).setValue(courses);
+                Toast.makeText(CourseInfoPreActivity.this,""+courseTitleData+" added to my courses",Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
-
+        removeCourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatabaseReference ref2 = firebaseDatabase.getReference("users/"+firebaseAuth.getCurrentUser().getUid()+"/my courses");
+                ref2.child(courseTitleData).setValue(null);
+                Toast.makeText(CourseInfoPreActivity.this,""+courseTitleData+" removed from my courses",Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
 
     }
 }

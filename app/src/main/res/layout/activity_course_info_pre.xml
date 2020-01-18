@@ -5,7 +5,7 @@
     android:id="@+id/course_pre_sub_rootview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f5f5f5"
+    android:background="@color/frame_color"
     tools:context=".CourseInfoPreActivity">
 
     <!-- TODO: Update blank fragment layout -->
@@ -39,7 +39,7 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="40dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/systdes" />
+                    tools:src="@drawable/systemdesignvhdl"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -56,7 +56,7 @@
                         android:textSize="32sp"
                         android:textStyle="bold"
                         android:textColor="@android:color/white"
-                        android:text="System Design With VHDL" />
+                        tools:text="System Design With VHDL" />
 
                     <TextView
                         android:id="@+id/course_code"
@@ -64,7 +64,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
                         android:textAppearance="?android:textAppearanceMedium"
-                        android:text="CPE 522" />
+                        tools:text="CPE 522" />
 
                 </LinearLayout>
 
@@ -77,7 +77,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="About"
-            android:textAppearance="?android:textAppearanceMedium"
+            android:textAppearance="?android:textAppearanceSmall"
             android:textStyle="bold"
             android:layout_margin="16dp"/>
 
@@ -88,6 +88,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/card_color"
                 android:orientation="vertical">
 
                 <TextView
@@ -96,9 +97,9 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:textAppearance="?android:textAppearanceMedium"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/profile_text_color"
                     android:textSize="16sp"
-                    android:text="This course covers the systematic design of advanced digital systems using field-programmable gate arrays (FPGAs). The emphasis is on top-down design starting with a software application, and translating it to high-level models using a hardware description language (such as VHDL or Verilog)."/>
+                    tools:text="This course covers the systematic design of advanced digital systems using field-programmable gate arrays (FPGAs). The emphasis is on top-down design starting with a software application, and translating it to high-level models using a hardware description language (such as VHDL or Verilog)."/>
 
             </LinearLayout>
 
@@ -116,7 +117,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Lecturers"
-                android:textAppearance="?android:textAppearanceMedium"
+                android:textAppearance="?android:textAppearanceSmall"
                 android:textStyle="bold"
                 android:layout_margin="16dp"/>
 
@@ -124,6 +125,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
+                android:backgroundTint="@color/card_color"
                 android:layout_marginBottom="1dp"
                 android:layout_marginTop="1dp">
 
@@ -164,8 +166,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
-                            android:textColor="@android:color/black"
-                            android:text="Engr. Dr. E. Olaye"
+                            android:textColor="@color/profile_text_color"
+                            tools:text="Engr. Dr. E. Olaye"
                             />
 
                     </LinearLayout>
@@ -179,6 +181,7 @@
                 android:id="@+id/lecturer_card_2"
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
+                android:backgroundTint="@color/card_color"
                 android:layout_marginBottom="1dp"
                 android:layout_marginTop="1dp">
 
@@ -219,8 +222,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
-                            android:textColor="@android:color/black"
-                            android:text="Engr. E. Eguagie"
+                            android:textColor="@color/profile_text_color"
+                            tools:text="Engr. E. Eguagie"
                             />
 
                     </LinearLayout>
@@ -234,6 +237,7 @@
                 android:id="@+id/lecturer_card_3"
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
+                android:backgroundTint="@color/card_color"
                 android:layout_marginBottom="1dp"
                 android:layout_marginTop="1dp">
 
@@ -274,8 +278,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
-                            android:textColor="@android:color/black"
-                            android:text="Engr. James O."
+                            android:textColor="@color/profile_text_color"
+                            tools:text="Engr. James O."
                             />
 
                     </LinearLayout>
@@ -289,15 +293,32 @@
 
     </LinearLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/add_course"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
+        android:text="Add"
+        android:textColor="@android:color/white"
         android:backgroundTint="@color/colorAccent"
-        android:src="@drawable/round_add_24"
-        android:tint="@android:color/white"
+        app:icon="@drawable/round_add_24"
+        app:iconTint="@android:color/white"
+        android:visibility="visible"
+        />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/remove_course"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:text="Remove"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/colorAccent"
+        app:icon="@drawable/baseline_clear_24"
+        app:iconTint="@android:color/white"
+        android:visibility="gone"
         />
 
 </FrameLayout>

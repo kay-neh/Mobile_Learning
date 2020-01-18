@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/frame_color"
     tools:context=".AboutFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -21,7 +22,8 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/card_color">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,9 +36,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:textColor="@android:color/black"
+                android:textColor="@color/profile_text_color"
                 android:textSize="16sp"
-                android:text="This course covers the systematic design of advanced digital systems using field-programmable gate arrays (FPGAs). The emphasis is on top-down design starting with a software application, and translating it to high-level models using a hardware description language (such as VHDL or Verilog)."/>
+                tools:text="This course covers the systematic design of advanced digital systems using field-programmable gate arrays (FPGAs). The emphasis is on top-down design starting with a software application, and translating it to high-level models using a hardware description language (such as VHDL or Verilog)."/>
 
         </LinearLayout>
 
@@ -63,6 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="72dp"
             android:layout_marginBottom="1dp"
+            android:backgroundTint="@color/card_color"
             android:layout_marginTop="1dp">
 
             <LinearLayout
@@ -102,9 +105,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@android:color/black"
-                        android:text="Engr. Dr. E. Olaye"
+                        android:textColor="@color/profile_text_color"
+                        tools:text="Engr. Dr. E. Olaye"
                         />
 
                 </LinearLayout>
@@ -118,6 +120,7 @@
             android:id="@+id/lecturer_card_2_post_reg"
             android:layout_width="match_parent"
             android:layout_height="72dp"
+            android:backgroundTint="@color/card_color"
             android:layout_marginBottom="1dp"
             android:layout_marginTop="1dp">
 
@@ -158,9 +161,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
-                        android:textColor="@android:color/black"
-                        android:textStyle="bold"
-                        android:text="Engr. E. Eguagie"
+                        android:textColor="@color/profile_text_color"
+                        tools:text="Engr. E. Eguagie"
                         />
 
                 </LinearLayout>
@@ -174,6 +176,7 @@
             android:id="@+id/lecturer_card_3_post_reg"
             android:layout_width="match_parent"
             android:layout_height="72dp"
+            android:backgroundTint="@color/card_color"
             android:layout_marginBottom="1dp"
             android:layout_marginTop="1dp">
 
@@ -214,9 +217,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
-                        android:textColor="@android:color/black"
-                        android:textStyle="bold"
-                        android:text="Engr. James O."
+                        android:textColor="@color/profile_text_color"
+                        tools:text="Engr. James O."
                         />
 
                 </LinearLayout>

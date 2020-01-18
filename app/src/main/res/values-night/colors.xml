@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#212121</color>
+    <color name="colorPrimaryDark">#212121</color>
+    <color name="colorAccent">#10CAC9</color>
+
+    <color name="profile_text_color">#FFFFFF</color>
+    <color name="frame_color">#121212</color>
+    <color name="card_color">#212121</color>
+
+    <color name="menu_color">#ffffff</color>
+    <color name="dialog_color">#000000</color>
+
+    <color name="textColorEarthquakeDetails">#B4BAC0</color>
+</resources>

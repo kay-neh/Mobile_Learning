@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/frame_color"
     tools:context=".BooksFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -19,13 +20,12 @@
             android:textStyle="bold"
             android:layout_margin="16dp"/>
 
-        <include layout="@layout/books_fragment_recycler_view"/>
-<!--
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/my_recycler_view_books"
+        <ListView
+            android:id="@+id/books_list_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
--->
+            android:layout_height="match_parent"
+            android:divider="@drawable/inset_divider"/>
+
     </LinearLayout>
 
 </FrameLayout>

@@ -6,16 +6,19 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.mobilelearning.utils.Books;
 import com.example.mobilelearning.utils.SimpleFragmentPagerAdapter;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
-
-import java.util.ArrayList;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class CourseInfoPostActivity extends AppCompatActivity {
 
@@ -28,9 +31,34 @@ public class CourseInfoPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_info_post);
 
+        //get data from host activity
+        final Intent j = getIntent();
+        final String courseTitleData = j.getStringExtra("Course Title");
+        String courseCodeData = j.getStringExtra("Course Code");
+        String courseImageData = j.getStringExtra("Course Image");
+        String courseDescription = j.getStringExtra("Course Description");
 
         Toolbar tool = findViewById(R.id.toolbar_course_post_sub);
-        tool.setOnClickListener(new View.OnClickListener() {
+
+        tool.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                if (id == R.id.action_remove_course) {
+                    String message = ""+courseTitleData+" removed from my courses";
+                    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                    DatabaseReference databaseReference = firebaseDatabase.getReference("users/"+firebaseAuth.getCurrentUser().getUid()+"/my courses");
+                    databaseReference.child(courseTitleData).setValue(null);
+                    Toast.makeText(CourseInfoPostActivity.this,message,Toast.LENGTH_SHORT).show();
+                    finish();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        tool.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -41,51 +69,38 @@ public class CourseInfoPostActivity extends AppCompatActivity {
         TextView courseCode = findViewById(R.id.course_code_post_reg);
         ImageView courseImage = findViewById(R.id.course_image_post_reg);
 
-
-        Intent j = getIntent();
-        courseTitle.setText(j.getStringExtra("Course Title"));
-        courseCode.setText(j.getStringExtra("Course Code"));
-        Glide.with(courseImage.getContext()).load(j.getStringExtra("Course Image")).into(courseImage);
-
+        //populate postreg acivity
+        Glide.with(courseImage.getContext()).load(courseImageData).into(courseImage);
+        courseTitle.setText(courseTitleData);
+        courseCode.setText(courseCodeData);
 
         //Populating About Fragment
-        String[] lecturerData = j.getStringArrayExtra("Course Lecturer");
-        String courseDescription = j.getStringExtra("Course Description");
-
         Bundle bundle = new Bundle();
-        bundle.putStringArray("Course Lecturer",lecturerData);
-        bundle.putString("Course Description",courseDescription);
+        bundle.putString("Course Title", courseTitleData);
+        bundle.putString("Course Description", courseDescription);
         AboutFragment aboutFragment = new AboutFragment();
         aboutFragment.setArguments(bundle);
 
         //Populating Books Fragment
-        final String[] books =j.getStringArrayExtra("Course Books");
         Bundle bundle1 = new Bundle();
-        bundle1.putStringArray("Course Books",books);
+        bundle1.putString("Course Title", courseTitleData);
         BooksFragment booksFragment = new BooksFragment();
         booksFragment.setArguments(bundle1);
 
-
         //Populating Program Fragment
-        final String[] courseOut1 = j.getStringArrayExtra("Course Out1");
-        final String[] courseOut2 = j.getStringArrayExtra("Course Out2");
-        final String[] courseOut3 = j.getStringArrayExtra("Course Out3");
         Bundle bundle2 = new Bundle();
-        bundle2.putStringArray("Course Out1",courseOut1);
-        bundle2.putStringArray("Course Out2",courseOut2);
-        bundle2.putStringArray("Course Out3",courseOut3);
+        bundle2.putString("Course Title", courseTitleData);
         ProgramFragment programFragment = new ProgramFragment();
         programFragment.setArguments(bundle2);
 
         viewPager = findViewById(R.id.viewpager);
-
-
         tabLayout = findViewById(R.id.tab_layout);
         adapt = new SimpleFragmentPagerAdapter(getSupportFragmentManager());
-        adapt.addFragment(programFragment,"Program");
-        adapt.addFragment(booksFragment,"Books");
-        adapt.addFragment(aboutFragment,"About");
+        adapt.addFragment(programFragment, "Program");
+        adapt.addFragment(booksFragment, "Books");
+        adapt.addFragment(aboutFragment, "About");
         tabLayout.setupWithViewPager(viewPager);
         viewPager.setAdapter(adapt);
+
     }
 }

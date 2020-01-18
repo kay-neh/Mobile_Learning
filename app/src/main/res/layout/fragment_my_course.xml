@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#f5f5f5"
+    android:background="@color/frame_color"
     tools:context=".MyCourseFragment"
     android:layout_marginBottom="56dp"
     android:id="@+id/course_frag">
@@ -23,17 +23,18 @@
         app:title="My Courses"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/recycler_view_my_course"
             android:layout_height="match_parent"
-            android:layout_width="match_parent" />
+            android:layout_width="match_parent"
+            />
 
         <ImageView
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_gravity="center"
             android:layout_marginTop="300dp"
-            android:src="@drawable/bookemp"/>
+            android:src="@drawable/bookemp"
+            />
 
         <TextView
             android:layout_width="wrap_content"

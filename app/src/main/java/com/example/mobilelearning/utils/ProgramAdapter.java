@@ -28,16 +28,19 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramAdapter.ProgramV
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View view = inflater.inflate(R.layout.program_fragment_recycler_view, parent, false);
+        View view = inflater.inflate(R.layout.program_fragment_list_view, parent, false);
         ProgramViewHolder pvh = new ProgramViewHolder(view);
         return pvh;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ProgramViewHolder holder, int position) {
+        /*
         holder.txt1.setText(courseOutline.get(position).courseOutlineTitle);
         holder.txt2.setText(courseOutline.get(position).courseOutlineDesc);
         holder.txt3.setText(courseOutline.get(position).courseOutlineIndex);
+
+         */
     }
 
     @Override

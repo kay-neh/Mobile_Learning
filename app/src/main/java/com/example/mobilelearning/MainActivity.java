@@ -12,7 +12,6 @@ import android.view.MenuItem;
 
 import com.example.mobilelearning.utils.Users;
 import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.data.model.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -34,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Loads all Fragments as Global variables
         final Fragment fragment1 = new HomeFragment();
-        final Fragment fragment3 = new MyCourseFragment();
-        final Fragment fragment4 = new ProfileFragment();
+        final Fragment fragment2 = new MyCourseFragment();
+        final Fragment fragment3 = new ProfileFragment();
         Fragment active = fragment1;
         final FragmentManager fm = getSupportFragmentManager();
 
@@ -44,17 +43,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       // getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-
         //Initialize FireBase tools
         mFireBaseAuth = FirebaseAuth.getInstance();
         mFireBaseDatabase = FirebaseDatabase.getInstance();
         mFireBaseDatabase.setPersistenceEnabled(true);
-        mDbref = mFireBaseDatabase.getReference("users");
+        mDbref = mFireBaseDatabase.getReference("users/"+mFireBaseAuth.getCurrentUser().getUid());
+
+        //checking if the node exists before overwriting the database...
+        if(mDbref.getParent() == null) {
+            Users users = new Users(mFireBaseAuth.getCurrentUser().getDisplayName(), mFireBaseAuth.getCurrentUser().getEmail());
+            mDbref.setValue(users);
+        }
 
         fm.beginTransaction().add(R.id.frame_container, fragment1, "1").commit();
+        fm.beginTransaction().add(R.id.frame_container, fragment2, "2").hide(fragment2).commit();
         fm.beginTransaction().add(R.id.frame_container, fragment3, "3").hide(fragment3).commit();
-        fm.beginTransaction().add(R.id.frame_container, fragment4, "4").hide(fragment4).commit();
 
 
 
@@ -72,13 +75,13 @@ public class MainActivity extends AppCompatActivity {
                         return true;
 
                     case R.id.button_courses:
-                        fm.beginTransaction().hide(active).show(fragment3).commit();
-                        active = fragment3;
+                        fm.beginTransaction().hide(active).show(fragment2).commit();
+                        active = fragment2;
                         return true;
 
                     case R.id.button_profile:
-                        fm.beginTransaction().hide(active).show(fragment4).commit();
-                        active = fragment4;
+                        fm.beginTransaction().hide(active).show(fragment3).commit();
+                        active = fragment3;
                         return true;
                 }
                 return false;
@@ -91,9 +94,6 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() != null) {
                     // already signed in
-                    //Dynamically adding new users to the database
-                    Users users = new Users(firebaseAuth.getCurrentUser().getDisplayName(),firebaseAuth.getCurrentUser().getEmail());
-                    mDbref.child(firebaseAuth.getCurrentUser().getUid()).setValue(users);
                 } else {
                     // not signed in
                     startActivityForResult(
@@ -113,8 +113,6 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN){
             if (resultCode == RESULT_OK){
-
-                
                 navigate.setSelectedItemId(R.id.button_home);
             }else if (resultCode == RESULT_CANCELED){
                 finish();
