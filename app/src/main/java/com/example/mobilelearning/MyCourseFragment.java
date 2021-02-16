@@ -46,40 +46,43 @@ public class MyCourseFragment extends Fragment {
         //read list of my courses from firebase...
         FirebaseAuth mFireBaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = firebaseDatabase.getReference("users/"+mFireBaseAuth.getCurrentUser().getUid()+"/my courses");
-
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                final List<Courses> myCourses = new ArrayList<>();
-                if(dataSnapshot.getValue() != null) {
-                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                         Courses courses = dataSnapshot1.getValue(Courses.class);
-                         myCourses.add(courses);
-                    }
-                    final MyCoursesAdapter myadapt = new MyCoursesAdapter(myCourses, new MyCoursesAdapter.ListItemCourseClickListener() {
-                        @Override
-                        public void onListItemClick(int index) {
-                            Intent intent = new Intent(getContext(), CourseInfoPostActivity.class);
-                            //passing data from fragment to activity......
-                            intent.putExtra("Course Title",myCourses.get(index).getCourseTitle());
-                            intent.putExtra("Course Code",myCourses.get(index).getCourseCode());
-                            intent.putExtra("Course Image",myCourses.get(index).getCourseImg());
-                            intent.putExtra("Course Description",myCourses.get(index).getCourseDescription());
-                            startActivity(intent);
+        if(mFireBaseAuth.getCurrentUser()!= null) {
+            DatabaseReference courseRef = firebaseDatabase.getReference("courses");
+            courseRef.orderByChild("users/" + mFireBaseAuth.getCurrentUser().getUid()).equalTo(true).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    final List<Courses> myCourses = new ArrayList<>();
+                    if (dataSnapshot.getValue() != null) {
+                        for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                            Courses courses = dataSnapshot1.getValue(Courses.class);
+                            myCourses.add(courses);
                         }
-                    });
-                    recycle.setAdapter(myadapt);
-                    recycle.setVisibility(View.VISIBLE);
+                        final MyCoursesAdapter myadapt = new MyCoursesAdapter(myCourses, new MyCoursesAdapter.ListItemCourseClickListener() {
+                            @Override
+                            public void onListItemClick(int index) {
+                                Intent intent = new Intent(getContext(), CourseInfoPostActivity.class);
+                                //passing data from fragment to activity......
+                                intent.putExtra("Course Id", myCourses.get(index).getCourseId());
+                                intent.putExtra("Course Title", myCourses.get(index).getCourseName());
+                                intent.putExtra("Course Code", myCourses.get(index).getCourseCode());
+                                intent.putExtra("Course Image", myCourses.get(index).getCoursePhoto());
+                                intent.putExtra("Course Description", myCourses.get(index).getCourseDescription());
+                                startActivity(intent);
+                            }
+                        });
+                        recycle.setAdapter(myadapt);
+                        recycle.setVisibility(View.VISIBLE);
+                    } else {
+                        recycle.setVisibility(View.GONE);
+                    }
                 }
-                 else{ recycle.setVisibility(View.GONE); }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
+                }
+            });
+        }
         return view;
     }
 }

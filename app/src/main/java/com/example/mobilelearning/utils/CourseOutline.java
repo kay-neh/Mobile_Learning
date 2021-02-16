@@ -1,39 +1,29 @@
 package com.example.mobilelearning.utils;
 
 public class CourseOutline {
-    private String content,title;
-    private String index;
+    private String courseOutlineTitle,courseOutlineDesc;
 
     public CourseOutline() {
     }
 
-    public CourseOutline(String content, String index, String title) {
-        this.content = content;
-        this.index = index;
-        this.title = title;
+    public CourseOutline(String courseOutlineTitle, String courseOutlineDesc) {
+        this.courseOutlineTitle = courseOutlineTitle;
+        this.courseOutlineDesc = courseOutlineDesc;
     }
 
-    public String getContent() {
-        return content;
+    public String getCourseOutlineTitle() {
+        return courseOutlineTitle;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setCourseOutlineTitle(String courseOutlineTitle) {
+        this.courseOutlineTitle = courseOutlineTitle;
     }
 
-    public String getIndex() {
-        return index;
+    public String getCourseOutlineDesc() {
+        return courseOutlineDesc;
     }
 
-    public void setIndex(String index) {
-        this.index = index;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public void setCourseOutlineDesc(String courseOutlineDesc) {
+        this.courseOutlineDesc = courseOutlineDesc;
     }
 }

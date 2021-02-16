@@ -68,9 +68,9 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ExploreV
     public void onBindViewHolder(@NonNull ExploreViewHolder holder, int position) {
 
 
-        Glide.with(holder.image.getContext()).load(course.get(position).courseImg).into(holder.image);
-        holder.txt1.setText(course.get(position).courseCode);
-        holder.txt2.setText(course.get(position).courseTitle);
+        Glide.with(holder.image.getContext()).load(course.get(position).getCoursePhoto()).into(holder.image);
+        holder.txt1.setText(course.get(position).getCourseCode());
+        holder.txt2.setText(course.get(position).getCourseName());
     }
 
     @Override

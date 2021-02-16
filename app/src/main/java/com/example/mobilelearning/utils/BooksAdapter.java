@@ -2,6 +2,7 @@ package com.example.mobilelearning.utils;
 
 import android.content.Context;
 import android.os.Environment;
+import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,11 +37,11 @@ public class BooksAdapter extends ArrayAdapter<Books> {
         ImageView downloadIcon = listItemView.findViewById(R.id.download);
 
         bookTitle.setText(currentBook.getBookName());
-        bookSize.setText(currentBook.getBookSize());
+        bookSize.setText(Formatter.formatShortFileSize(getContext(),Long.parseLong(currentBook.getBookSize())));
 
         //sets the download icon dynamically based on book availability on device
         String bookFilePath = "/Android/data/com.example.mobilelearning/files/Download/";
-        String bookFileName = currentBook.getBookName()+".pdf";
+        String bookFileName = currentBook.getBookName();
         File file = new File(Environment.getExternalStorageDirectory()+ bookFilePath + bookFileName);
 
         if (file.exists()){

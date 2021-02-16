@@ -32,9 +32,9 @@ public class CourseOutlineAdapter extends ArrayAdapter<CourseOutline> {
         TextView courseOutlineTitle = listItemView.findViewById(R.id.course_outline_title);
         TextView courseOutlineDesc = listItemView.findViewById(R.id.course_outline_description);
 
-        courseOutlineIndex.setText(currentCourseOutline.getIndex());
-        courseOutlineTitle.setText(currentCourseOutline.getTitle());
-        courseOutlineDesc.setText(currentCourseOutline.getContent());
+        courseOutlineIndex.setText(String.valueOf(position + 1));
+        courseOutlineTitle.setText(currentCourseOutline.getCourseOutlineTitle());
+        courseOutlineDesc.setText(currentCourseOutline.getCourseOutlineDesc());
 
         return listItemView;
     }

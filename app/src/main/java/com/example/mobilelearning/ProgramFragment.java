@@ -42,9 +42,9 @@ public class ProgramFragment extends Fragment {
         final ListView courseOutlineListView = view.findViewById(R.id.course_outline_list_view);
 
         //retrieve data from host activity
-        String courseTitleData = getArguments().getString("Course Title");
+        String courseId = getArguments().getString("Course Id");
 
-        DatabaseReference databaseReference = firebaseDatabase.getReference("courses/"+courseTitleData+"/courseOutline");
+        DatabaseReference databaseReference = firebaseDatabase.getReference("courses/"+courseId+"/courseOutline");
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

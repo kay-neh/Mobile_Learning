@@ -1,33 +1,49 @@
 package com.example.mobilelearning.utils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Courses {
-
-     String courseCode,courseTitle,courseImg,courseDescription;
-   // private Map<String, Books> books = new HashMap<>();
-   // private Map<String, CourseOutline> courseOutline = new HashMap<>();
-  //  List<String> courseLecturer = new ArrayList<>();
-    //List<Books> books = new ArrayList<>();
-    //List<CourseOutline> courseOutline = new ArrayList<>();
+    private String courseId,courseName,courseCode,courseLevel,courseSemester,courseDescription, coursePhoto;
+    private List<CourseOutline> courseOutline;
 
     public Courses(){
     }
 
-    public Courses(String courseCode, String courseTitle, String courseImg) {
+    public Courses(String courseId, String courseName, String courseCode, String courseLevel, String courseSemester, String courseDescription, List<CourseOutline> courseOutline) {
+        this.courseId = courseId;
+        this.courseName = courseName;
         this.courseCode = courseCode;
-        this.courseTitle = courseTitle;
-        this.courseImg = courseImg;
+        this.courseLevel = courseLevel;
+        this.courseSemester = courseSemester;
+        this.courseDescription = courseDescription;
+        this.courseOutline = courseOutline;
     }
 
-    public Courses(String courseCode, String courseTitle, String courseImg, String courseDescription) {
+    public Courses(String courseId, String courseName, String courseCode, String courseLevel, String courseSemester, String courseDescription, String coursePhoto, List<CourseOutline> courseOutline) {
+        this.courseId = courseId;
+        this.courseName = courseName;
         this.courseCode = courseCode;
-        this.courseTitle = courseTitle;
-        this.courseImg = courseImg;
+        this.courseLevel = courseLevel;
+        this.courseSemester = courseSemester;
         this.courseDescription = courseDescription;
+        this.coursePhoto = coursePhoto;
+        this.courseOutline = courseOutline;
+    }
+
+    public String getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(String courseId) {
+        this.courseId = courseId;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 
     public String getCourseCode() {
@@ -38,20 +54,20 @@ public class Courses {
         this.courseCode = courseCode;
     }
 
-    public String getCourseTitle() {
-        return courseTitle;
+    public String getCourseLevel() {
+        return courseLevel;
     }
 
-    public void setCourseTitle(String courseTitle) {
-        this.courseTitle = courseTitle;
+    public void setCourseLevel(String courseLevel) {
+        this.courseLevel = courseLevel;
     }
 
-    public String getCourseImg() {
-        return courseImg;
+    public String getCourseSemester() {
+        return courseSemester;
     }
 
-    public void setCourseImg(String courseImg) {
-        this.courseImg = courseImg;
+    public void setCourseSemester(String courseSemester) {
+        this.courseSemester = courseSemester;
     }
 
     public String getCourseDescription() {
@@ -60,5 +76,21 @@ public class Courses {
 
     public void setCourseDescription(String courseDescription) {
         this.courseDescription = courseDescription;
+    }
+
+    public String getCoursePhoto() {
+        return coursePhoto;
+    }
+
+    public void setCoursePhoto(String coursePhoto) {
+        this.coursePhoto = coursePhoto;
+    }
+
+    public List<CourseOutline> getCourseOutline() {
+        return courseOutline;
+    }
+
+    public void setCourseOutline(List<CourseOutline> courseOutline) {
+        this.courseOutline = courseOutline;
     }
 }

@@ -59,10 +59,10 @@ public class BooksFragment extends Fragment {
         final ListView booksListView = view.findViewById(R.id.books_list_view);
 
         //retrieve data from host activity
-        String courseTitleData = getArguments().getString("Course Title");
+        String courseId = getArguments().getString("Course Id");
 
-        DatabaseReference databaseReference = firebaseDatabase.getReference("courses/"+courseTitleData+"/books");
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        DatabaseReference databaseReference = firebaseDatabase.getReference("books");
+        databaseReference.orderByChild("courses/" + courseId).equalTo(true).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 final List<Books> books = new ArrayList<>();
@@ -78,18 +78,37 @@ public class BooksFragment extends Fragment {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                         String bookFilePath = "/Android/data/com.example.mobilelearning/files/Download/";
-                        String bookFileName = books.get(position).getBookName()+".pdf";
-
-                        File file = new File(Environment.getExternalStorageDirectory()+ bookFilePath + bookFileName);
+                        String bookFileTitle = books.get(position).getBookName();
+                        String [] book = bookFileTitle.split("\\.(?=[^\\.]+$)");
+                        final String bookFileName = book[0];
+                        final String bookFileExtension = "." + book[1];
+                        String fileType = "";
+                        switch (bookFileExtension) {
+                            case ".pdf":
+                                fileType = "application/pdf";
+                                break;
+                            case ".doc":
+                                fileType = "application/msword";
+                                break;
+                            case ".docx":
+                                fileType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                                break;
+                            case ".text":
+                                fileType = "text/*";
+                                break;
+                            case ".xls":
+                                fileType = "application/vnd.ms-excel";
+                                break;
+                        }
+                        //here now
+                        File file = new File(Environment.getExternalStorageDirectory()+ bookFilePath + bookFileTitle);
                         //Opens the downloaded book with an intent if present else it downloads the book
                         if (file.exists()){
-                            //create a new entry in database called my books to keep track of downloaded books and store the book name
-                            DatabaseReference myBooksDatabaseRef = firebaseDatabase.getReference("users/"+firebaseAuth.getCurrentUser().getUid()+"/my books");
-                            myBooksDatabaseRef.child(books.get(position).getBookName()).setValue(true);
+                            booksAdapter.notifyDataSetChanged();
                             //start an intent to open the book
                             Intent openBook = new Intent(Intent.ACTION_VIEW);
                             Uri bookUri = FileProvider.getUriForFile(getContext(),"com.example.mobilelearning.provider",file);
-                            openBook.setDataAndType(bookUri,"application/pdf");
+                            openBook.setDataAndType(bookUri,fileType);
                             openBook.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                             openBook.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                             //using an intent picker.
@@ -106,7 +125,7 @@ public class BooksFragment extends Fragment {
                             @Override
                             public void onSuccess(Uri uri) {
                                 String downloadUrl = uri.toString();
-                                downloadFile(getContext(), books.get(position).getBookName(), ".pdf", DIRECTORY_DOWNLOADS, downloadUrl);
+                                downloadFile(getContext(), bookFileName, bookFileExtension, DIRECTORY_DOWNLOADS, downloadUrl);
                                 Toast.makeText(getContext(),"Downloading...",Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -124,7 +143,7 @@ public class BooksFragment extends Fragment {
     return view;
     }
     //Helper method to call android's default download manager....
-    public void downloadFile(Context context,String filename,String fileExtension,String destinationDirectory,String url){
+    public void downloadFile(Context context, String filename, String fileExtension, String destinationDirectory, String url){
         DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         Uri uri = Uri.parse(url);
         DownloadManager.Request request = new DownloadManager.Request(uri);

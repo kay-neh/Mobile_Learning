@@ -64,12 +64,19 @@ public class MyCoursesAdapter extends RecyclerView.Adapter<MyCoursesAdapter.MyCo
 
     @Override
     public void onBindViewHolder(@NonNull MyCourseViewHolder holder, int position) {
-        Glide.with(holder.image.getContext()).load(mycourse.get(position).courseImg).into(holder.image);
-        holder.txt1.setText(mycourse.get(position).courseCode);
-        holder.txt2.setText(mycourse.get(position).courseTitle);
+        if(mycourse.get(position).getCoursePhoto() != null) {
+            Glide.with(holder.image.getContext()).load(mycourse.get(position).getCoursePhoto()).into(holder.image);
+        }
+        holder.txt1.setText(mycourse.get(position).getCourseCode());
+        holder.txt2.setText(mycourse.get(position).getCourseName());
     }
 
     public int getItemCount() {
         return mycourse.size();
     }
+
+    public String getCourseItemId(int index){
+        return mycourse.get(index).getCourseId();
+    }
+
 }

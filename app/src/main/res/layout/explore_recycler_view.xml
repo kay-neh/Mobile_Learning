@@ -4,7 +4,6 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:layout_margin="8dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -12,6 +11,7 @@
         android:id="@+id/card_view_explore"
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        card_view:cardElevation="0dp"
         android:backgroundTint="@color/card_color"
         card_view:cardCornerRadius="4dp"
         >
@@ -40,7 +40,8 @@
                     android:id="@+id/course_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:textAppearanceMedium"
+                    android:textAppearance="?android:textAppearanceSmall"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="@color/profile_text_color"
                     tools:text="Project and Thesis"

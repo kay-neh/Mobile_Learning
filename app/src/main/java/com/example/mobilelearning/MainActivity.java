@@ -14,58 +14,88 @@ import com.example.mobilelearning.utils.Users;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
-        BottomNavigationView navigate;
+    BottomNavigationView navigate;
+    private static final int RC_SIGN_IN = 123;
+    FirebaseAuth.AuthStateListener authStateListener;
+    FirebaseAuth firebaseAuth;
+    FirebaseUser firebaseUser;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
 
-        //Auth tools
-        private static final int RC_SIGN_IN = 123;
-        private FirebaseAuth mFireBaseAuth;
-        private FirebaseAuth.AuthStateListener mAuthStateListener;
+    Fragment fragment1,fragment2,fragment3,active;
+    FragmentManager fm;
 
-        //Realtime Db tools
-        private FirebaseDatabase mFireBaseDatabase;
-        private DatabaseReference mDbref;
-
-
-        //Loads all Fragments as Global variables
-        final Fragment fragment1 = new HomeFragment();
-        final Fragment fragment2 = new MyCourseFragment();
-        final Fragment fragment3 = new ProfileFragment();
-        Fragment active = fragment1;
-        final FragmentManager fm = getSupportFragmentManager();
+    String fireBaseUserId;
+    String fireBaseUserName;
+    String fireBaseUserEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        firebaseDatabase = FirebaseDatabase.getInstance();
 
         //Initialize FireBase tools
-        mFireBaseAuth = FirebaseAuth.getInstance();
-        mFireBaseDatabase = FirebaseDatabase.getInstance();
-        mFireBaseDatabase.setPersistenceEnabled(true);
-        mDbref = mFireBaseDatabase.getReference("users/"+mFireBaseAuth.getCurrentUser().getUid());
+        firebaseAuth = FirebaseAuth.getInstance();
 
-        //checking if the node exists before overwriting the database...
-        if(mDbref.getParent() == null) {
-            Users users = new Users(mFireBaseAuth.getCurrentUser().getDisplayName(), mFireBaseAuth.getCurrentUser().getEmail());
-            mDbref.setValue(users);
-        }
+        //Auth Listener Setup..
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                firebaseUser = firebaseAuth.getCurrentUser();
+                if (firebaseUser != null) {
+                    fireBaseUserId = firebaseUser.getUid();
+                    fireBaseUserName = firebaseUser.getDisplayName();
+                    fireBaseUserEmail = firebaseUser.getEmail();
+
+                    databaseReference = firebaseDatabase.getReference("users/"+fireBaseUserId);
+                    databaseReference.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(!dataSnapshot.hasChildren()){
+                                Users users = new Users(fireBaseUserName, fireBaseUserEmail);
+                                databaseReference.setValue(users);
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {}
+                    });
+
+                } else {
+                    // not signed in
+                    startActivityForResult(
+                            // Get an instance of AuthUI based on the default app
+                            AuthUI.getInstance().createSignInIntentBuilder()
+                                    .setIsSmartLockEnabled(false, true)
+                                    .build(),
+                            RC_SIGN_IN);
+                }
+            }
+        };
+
+        //Loads all Fragments as Global variables
+        fragment1 = new HomeFragment();
+        fragment2 = new MyCourseFragment();
+        fragment3 = new ProfileFragment();
+        active = fragment1;
+        fm = getSupportFragmentManager();
 
         fm.beginTransaction().add(R.id.frame_container, fragment1, "1").commit();
         fm.beginTransaction().add(R.id.frame_container, fragment2, "2").hide(fragment2).commit();
         fm.beginTransaction().add(R.id.frame_container, fragment3, "3").hide(fragment3).commit();
 
-
-
         //Bottom Navigation Listener Setup..
         navigate = findViewById(R.id.navigation);
-
         navigate.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
@@ -88,30 +118,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         );
-        //Auth Listener Setup..
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser() != null) {
-                    // already signed in
-                } else {
-                    // not signed in
-                    startActivityForResult(
-                            // Get an instance of AuthUI based on the default app
-                            AuthUI.getInstance().createSignInIntentBuilder()
-                                    .setIsSmartLockEnabled(false, true)
-                                    .build(),
-                            RC_SIGN_IN);
-                }
-            }
-        };
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN){
+        if (requestCode == RC_SIGN_IN ){
             if (resultCode == RESULT_OK){
                 navigate.setSelectedItemId(R.id.button_home);
             }else if (resultCode == RESULT_CANCELED){
@@ -121,14 +134,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        mFireBaseAuth.removeAuthStateListener(mAuthStateListener);
+    protected void onResume() {
+        super.onResume();
+        firebaseAuth.addAuthStateListener(authStateListener);
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        mFireBaseAuth.addAuthStateListener(mAuthStateListener);
+    protected void onPause() {
+        super.onPause();
+        firebaseAuth.removeAuthStateListener(authStateListener);
     }
 }

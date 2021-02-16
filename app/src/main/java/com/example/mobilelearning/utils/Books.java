@@ -1,16 +1,32 @@
 package com.example.mobilelearning.utils;
 
 public class Books implements java.io.Serializable {
-    private String bookName;
-    private String bookSize;
-    private String bookDownloadUrl;
+    private String bookId,bookName,bookUploadDate,bookSize,bookDownloadUrl;
 
-    public Books(){}
+    public Books() {
+    }
 
-    public Books(String bookName, String bookSize, String bookDownloadUrl) {
+    public Books(String bookId, String bookName, String bookUploadDate, String bookSize) {
+        this.bookId = bookId;
         this.bookName = bookName;
+        this.bookUploadDate = bookUploadDate;
+        this.bookSize = bookSize;
+    }
+
+    public Books(String bookId, String bookName, String bookUploadDate, String bookSize, String bookDownloadUrl) {
+        this.bookId = bookId;
+        this.bookName = bookName;
+        this.bookUploadDate = bookUploadDate;
         this.bookSize = bookSize;
         this.bookDownloadUrl = bookDownloadUrl;
+    }
+
+    public String getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(String bookId) {
+        this.bookId = bookId;
     }
 
     public String getBookName() {
@@ -19,6 +35,14 @@ public class Books implements java.io.Serializable {
 
     public void setBookName(String bookName) {
         this.bookName = bookName;
+    }
+
+    public String getBookUploadDate() {
+        return bookUploadDate;
+    }
+
+    public void setBookUploadDate(String bookUploadDate) {
+        this.bookUploadDate = bookUploadDate;
     }
 
     public String getBookSize() {

@@ -6,8 +6,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -15,15 +13,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.mobilelearning.utils.Users;
-import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -49,10 +43,11 @@ public class ProfileFragment extends Fragment {
     private FirebaseAuth firebaseAuth;
     FirebaseDatabase firebaseDatabase;
 
+    String currentPhoto;
+
     public ProfileFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,21 +72,29 @@ public class ProfileFragment extends Fragment {
         //setting username, email and profile picture for current user
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference("profile_photos");
+        storageReference = firebaseStorage.getReference("photos/user_photo");
         firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = firebaseDatabase.getReference("users/"+firebaseAuth.getCurrentUser().getUid());
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Users users = dataSnapshot.getValue(Users.class);
-                userName.setText(users.getName());
-                userEmail.setText(users.getEmail());
-                Glide.with(profilePicture.getContext()).load(users.getPhotoUrl()).into(profilePicture);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { }
-        });
 
+        if(firebaseAuth.getCurrentUser()!=null) {
+            DatabaseReference databaseReference = firebaseDatabase.getReference("users/" + firebaseAuth.getCurrentUser().getUid());
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Users users = dataSnapshot.getValue(Users.class);
+                    if(users!=null) {
+                        userName.setText(users.getUserName());
+                        userEmail.setText(users.getUserEmail());
+                        currentPhoto = users.getUserPhoto();
+                        if(currentPhoto != null) {
+                            Glide.with(getActivity().getApplicationContext()).load(currentPhoto).into(profilePicture);
+                        }
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+        }
         //Choosing profile picture
         profilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,25 +120,35 @@ public class ProfileFragment extends Fragment {
 */
         return view;
     }
+
     //Sending the chosen picture to firebase storage and creating a database reference to it
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == RC_PHOTO_PICKER && resultCode == RESULT_OK){
-            Uri selectedImageUri = data.getData();
-            final StorageReference profilePhotoRef = storageReference.child(firebaseAuth.getCurrentUser().getUid());
-            profilePhotoRef.putFile(selectedImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    profilePhotoRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            DatabaseReference ref2 = firebaseDatabase.getReference("users/"+firebaseAuth.getCurrentUser().getUid()+"/photoUrl");
-                            ref2.setValue(uri.toString());
-                        }
-                    });
-                }
-            });
+            if(data!=null && firebaseAuth.getCurrentUser()!=null) {
+                Uri selectedImageUri = data.getData();
+                final StorageReference profilePhotoRef = storageReference.child(firebaseAuth.getCurrentUser().getUid() + "/" + selectedImageUri.getLastPathSegment());
+                profilePhotoRef.putFile(selectedImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        profilePhotoRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                DatabaseReference ref2 = firebaseDatabase.getReference("users/" + firebaseAuth.getCurrentUser().getUid() + "/userPhoto");
+                                if(currentPhoto != null){
+                                    StorageReference ref = firebaseStorage.getReferenceFromUrl(currentPhoto);
+                                    ref.delete();
+                                }
+                                ref2.setValue(uri.toString());
+                            }
+                        });
+                    }
+                });
+            }
+
         }
     }
+
+
 }

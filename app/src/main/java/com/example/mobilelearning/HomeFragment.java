@@ -1,6 +1,5 @@
 package com.example.mobilelearning;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -15,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.mobilelearning.utils.Courses;
 import com.example.mobilelearning.utils.ExploreAdapter;
+import com.example.mobilelearning.utils.ExploreItemDecoration;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -45,6 +45,7 @@ public class HomeFragment extends Fragment {
         final GridLayoutManager glm = new GridLayoutManager(getContext(),2);
         recycle.setLayoutManager(glm);
         recycle.setHasFixedSize(true);
+        recycle.addItemDecoration(new ExploreItemDecoration(32));
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         final DatabaseReference databaseReference = firebaseDatabase.getReference("courses");
@@ -62,10 +63,7 @@ public class HomeFragment extends Fragment {
                     public void onListItemClick(int index) {
                         Intent intent = new Intent(getContext(), CourseInfoPreActivity.class);
                         //passing data from fragment to activity......
-                        intent.putExtra("Course Title",course.get(index).getCourseTitle());
-                        intent.putExtra("Course Code",course.get(index).getCourseCode());
-                        intent.putExtra("Course Image",course.get(index).getCourseImg());
-                        intent.putExtra("Course Description",course.get(index).getCourseDescription());
+                        intent.putExtra("Course Id",course.get(index).getCourseId());
                         startActivity(intent);
                     }
                 });
