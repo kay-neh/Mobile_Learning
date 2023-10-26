@@ -43,9 +43,18 @@ public class HomeFragment extends Fragment {
 
         final RecyclerView recycle = view.findViewById(R.id.recycler_view_explore);
         final GridLayoutManager glm = new GridLayoutManager(getContext(),2);
+
+        int spacing = 10;
+        recycle.setPadding(spacing,spacing,spacing,spacing);
+        recycle.setClipToPadding(false);
+        recycle.setClipChildren(false);
+        recycle.addItemDecoration(new ExploreItemDecoration(spacing));
         recycle.setLayoutManager(glm);
         recycle.setHasFixedSize(true);
-        recycle.addItemDecoration(new ExploreItemDecoration(32));
+
+//        recycle.setLayoutManager(glm);
+//        recycle.setHasFixedSize(true);
+//        recycle.addItemDecoration(new ExploreItemDecoration(16));
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         final DatabaseReference databaseReference = firebaseDatabase.getReference("courses");
