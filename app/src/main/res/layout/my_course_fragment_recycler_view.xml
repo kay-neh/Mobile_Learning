@@ -26,7 +26,7 @@
                 android:layout_width="@dimen/list_item_height"
                 android:layout_height="@dimen/list_item_height"
                 android:scaleType="centerCrop"
-                tools:src="@drawable/systemdesignvhdl"
+                tools:src="@drawable/compgra"
                 />
 
             <LinearLayout

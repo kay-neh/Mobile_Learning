@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/frame_color"
-    tools:context=".AboutFragment">
+    tools:context=".ui.coursedetails.about.AboutFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout

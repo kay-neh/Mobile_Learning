@@ -6,7 +6,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/frame_color"
-    tools:context=".ProfileFragment"
+    tools:context=".ui.home.profile.ProfileFragment"
     android:layout_marginBottom="56dp"
     android:id="@+id/profile2_frag">
 
@@ -51,7 +51,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/onepiece"
+                android:src="@drawable/baseline_person_24"
                 android:layout_gravity="center"
                 android:layout_margin="16dp"
                 />
@@ -155,7 +155,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/round_power_settings_new_24"
+                        android:src="@drawable/baseline_power_settings_new_24"
                         android:layout_gravity="center"
                         android:layout_margin="16dp"
                         />

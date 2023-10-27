@@ -12,18 +12,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.mobilelearning.R;
+import com.example.mobilelearning.data.pojo.Lecturer;
 
 import java.util.List;
 
 public class LecturerAdapter extends RecyclerView.Adapter<LecturerAdapter.LecturerVH>{
 
-    private Context context;
-    private List<Lecturers> lecturersList;
+    private List<Lecturer> lecturerList;
 
     //public constructor
-    public LecturerAdapter(Context context) {
-        this.context = context;
-    }
+    public LecturerAdapter() {}
 
     //viewholder inner class
     class LecturerVH extends RecyclerView.ViewHolder{
@@ -48,8 +46,8 @@ public class LecturerAdapter extends RecyclerView.Adapter<LecturerAdapter.Lectur
 
     @Override
     public void onBindViewHolder(@NonNull LecturerVH holder, int position) {
-        if (lecturersList != null) {
-            Lecturers currentLecturer = lecturersList.get(position);
+        if (lecturerList != null) {
+            Lecturer currentLecturer = lecturerList.get(position);
 
             if (currentLecturer.getLecturerPhoto() != null) {
                 Glide.with(holder.lectImage.getContext()).load(currentLecturer.getLecturerPhoto()).into(holder.lectImage);
@@ -60,13 +58,13 @@ public class LecturerAdapter extends RecyclerView.Adapter<LecturerAdapter.Lectur
 
     @Override
     public int getItemCount() {
-        if (lecturersList != null)
-            return lecturersList.size();
+        if (lecturerList != null)
+            return lecturerList.size();
         else return 0;
     }
 
-    public void setLecturersList(List<Lecturers> lecturers){
-        lecturersList = lecturers;
+    public void setList(List<Lecturer> lecturers){
+        lecturerList = lecturers;
         notifyDataSetChanged();
     }
 

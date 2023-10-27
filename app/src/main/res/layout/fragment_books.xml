@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/frame_color"
-    tools:context=".BooksFragment">
+    tools:context=".ui.coursedetails.books.BooksFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
@@ -20,11 +20,11 @@
             android:textStyle="bold"
             android:layout_margin="16dp"/>
 
-        <ListView
-            android:id="@+id/books_list_view"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/book_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@drawable/inset_divider"/>
+            tools:listitem="@layout/books_fragment_list_view"/>
 
     </LinearLayout>
 

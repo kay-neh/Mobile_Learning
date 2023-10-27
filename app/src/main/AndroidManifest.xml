@@ -29,15 +29,15 @@
         </provider>
 
         <activity
-            android:name=".CourseInfoPostActivity"
+            android:name=".ui.coursedetails.CourseInfoPostActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".CourseInfoPreActivity"
+            android:name=".ui.course.CourseInfoPreActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.explore.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait">

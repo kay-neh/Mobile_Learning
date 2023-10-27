@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/frame_color"
-    tools:context=".CourseInfoPreActivity">
+    tools:context=".ui.course.CourseInfoPreActivity">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
@@ -39,7 +39,7 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="40dp"
                     android:scaleType="centerCrop"
-                    tools:src="@drawable/systemdesignvhdl"/>
+                    tools:src="@drawable/compgra"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -137,7 +137,7 @@
         android:text="Add"
         android:textColor="@android:color/white"
         android:backgroundTint="@color/colorAccent"
-        app:icon="@drawable/round_add_24"
+        app:icon="@drawable/baseline_add_24"
         app:iconTint="@android:color/white"
         android:visibility="visible"
         />

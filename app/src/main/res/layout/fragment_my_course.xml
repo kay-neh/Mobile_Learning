@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/frame_color"
-    tools:context=".MyCourseFragment"
+    tools:context=".ui.mycourses.MyCourseFragment"
     android:layout_marginBottom="56dp"
     android:id="@+id/course_frag">
 
@@ -28,25 +28,33 @@
             android:layout_width="match_parent"
             />
 
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/empty_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="center">
+
         <ImageView
+            android:id="@+id/empty_image"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="300dp"
-            android:src="@drawable/bookemp"
-            />
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/undraw_empty_course" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="Sorry, you have not added any course"
-            android:layout_gravity="center"
+            android:layout_below="@id/empty_image"
             android:textStyle="bold"
             android:textColor="@android:color/darker_gray"
             android:textSize="16sp"
             />
 
-
-    </LinearLayout>
+    </RelativeLayout>
 
 </FrameLayout>
