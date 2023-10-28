@@ -1,9 +1,6 @@
 package com.example.mobilelearning.data.remote;
 
-import static android.os.Environment.DIRECTORY_DOWNLOADS;
-
 import android.net.Uri;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -15,7 +12,6 @@ import com.example.mobilelearning.data.pojo.Course;
 import com.example.mobilelearning.data.pojo.CourseOutline;
 import com.example.mobilelearning.data.pojo.Lecturer;
 import com.example.mobilelearning.data.pojo.User;
-import com.example.mobilelearning.ui.coursedetails.books.BooksAdapter;
 import com.example.mobilelearning.utils.Constants;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;

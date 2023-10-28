@@ -1,6 +1,7 @@
 package com.example.mobilelearning.ui.coursedetails.books;
 
 import android.content.Context;
+import android.os.Environment;
 import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mobilelearning.R;
 import com.example.mobilelearning.data.pojo.Book;
 
+import java.io.File;
 import java.util.List;
 
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookVH>{
@@ -46,6 +48,16 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookVH>{
             holder.bookTitle.setText(book.getBookName());
             holder.bookSize.setText(Formatter.formatShortFileSize(holder.itemView.getContext(), Long.parseLong(book.getBookSize())));
 
+            //sets the download icon dynamically based on book availability on device
+            String bookFilePath = "/Android/data/com.example.mobilelearning/files/Download/";
+            String bookFileName = book.getBookName();
+            File file = new File(Environment.getExternalStorageDirectory()+ bookFilePath + bookFileName);
+
+            if (file.exists()){
+                holder.downloaded.setImageResource(R.drawable.baseline_offline_pin_24);
+            }else{
+                holder.downloaded.setImageResource(R.drawable.baseline_download_for_offline_24);
+            }
 
         }
     }
@@ -59,6 +71,10 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookVH>{
 
     public void setList(List<Book> books){
         this.books = books;
+        notifyDataSetChanged();
+    }
+
+    public void refreshAdapter(){
         notifyDataSetChanged();
     }
 

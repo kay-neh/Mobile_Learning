@@ -13,7 +13,6 @@ public class Constants {
     public static final String KEY_USER_PHOTO = "userPhoto";
     public static final String KEY_BOOKS = "books";
 
-
     public static final String PATH_PROFILE_PHOTO = "photos/user_photo";
 
 }
